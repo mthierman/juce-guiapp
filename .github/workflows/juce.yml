@@ -1,0 +1,27 @@
+name: JUCE DemoRunner
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  JUCE-DemoRunner:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Dev
+        run: . .\devshell.ps1 && dev && write CMAKE-VERSION && cmake --version && write NINJA-VERSION && ninja --version && cd libs/JUCE && cmake -B build -G "Ninja" -DJUCE_BUILD_EXAMPLES=ON -DJUCE_BUILD_EXTRAS=ON && cmake --build build --target DemoRunner AudioPluginHost
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          tag_name: JUCE
+          name: JUCE
+          files: |
+            libs/JUCE/build/examples/DemoRunner/DemoRunner_artefacts/Debug/DemoRunner.exe
+            libs/JUCE/build/extras/AudioPluginHost/AudioPluginHost_artefacts/Debug/AudioPluginHost.exe
