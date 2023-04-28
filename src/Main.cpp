@@ -61,7 +61,7 @@ class GuiAppApplication : public juce::JUCEApplication
                              DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar(false);
-            setContentOwned(new MainComponent(), true);
+            setContentOwned(new MyComponent(), true);
 
 #if JUCE_IOS || JUCE_ANDROID
             setFullScreen(true);

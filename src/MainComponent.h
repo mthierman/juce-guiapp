@@ -1,32 +1,28 @@
 #pragma once
 
-// CMake builds don't use an AppConfig.h, so it's safe to include juce module headers
-// directly. If you need to remain compatible with Projucer-generated builds, and
-// have called `juce_generate_juce_header(<thisTarget>)` in your CMakeLists.txt,
-// you could `#include <JuceHeader.h>` here instead, to make all your module headers visible.
-#include <juce_audio_basics/juce_audio_basics.h>
-#include <juce_audio_devices/juce_audio_devices.h>
-#include <juce_audio_formats/juce_audio_formats.h>
-#include <juce_audio_processors/juce_audio_processors.h>
+// #include <juce_audio_basics/juce_audio_basics.h>
+// #include <juce_audio_devices/juce_audio_devices.h>
+// #include <juce_audio_formats/juce_audio_formats.h>
+// #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_audio_utils/juce_audio_utils.h>
-#include <juce_core/juce_core.h>
-#include <juce_data_structures/juce_data_structures.h>
-#include <juce_events/juce_events.h>
-#include <juce_graphics/juce_graphics.h>
-#include <juce_gui_basics/juce_gui_basics.h>
-#include <juce_gui_extra/juce_gui_extra.h>
+// #include <juce_core/juce_core.h>
+// #include <juce_data_structures/juce_data_structures.h>
+// #include <juce_events/juce_events.h>
+// #include <juce_graphics/juce_graphics.h>
+// #include <juce_gui_basics/juce_gui_basics.h>
+// #include <juce_gui_extra/juce_gui_extra.h>
+// #include <juce_dsp/juce_dsp.h>
 
-//==============================================================================
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
-class MainComponent : public juce::AudioAppComponent
+class MyComponent : public juce::AudioAppComponent
 {
   public:
-    //==============================================================================
-    MainComponent();
-    ~MainComponent() override { shutdownAudio(); }
+    MyComponent()
+    {
+        setSize(600, 400);
+        setAudioChannels(0, 2);
+    }
+
+    ~MyComponent() override { shutdownAudio(); }
 
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override
     {
@@ -55,14 +51,8 @@ class MainComponent : public juce::AudioAppComponent
         }
     }
 
-    //==============================================================================
-    void paint(juce::Graphics &) override;
-    void resized() override;
-
   private:
-    //==============================================================================
-    // Your private member variables go here...
     juce::Random random;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MyComponent)
 };
