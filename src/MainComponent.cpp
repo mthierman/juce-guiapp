@@ -1,7 +1,7 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() { setSize(600, 400); }
+// MainComponent::MainComponent() { setSize(600, 400); }
 
 //==============================================================================
 void MainComponent::paint(juce::Graphics &g)
@@ -16,7 +16,7 @@ void MainComponent::paint(juce::Graphics &g)
 
 void MainComponent::resized()
 {
-    // This is called when the MainComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    openButton.setBounds(10, 10, getWidth() - 20, 20);
+    playButton.setBounds(10, 40, getWidth() - 20, 20);
+    stopButton.setBounds(10, 70, getWidth() - 20, 20);
 }
