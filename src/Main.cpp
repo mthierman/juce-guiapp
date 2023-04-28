@@ -60,7 +60,7 @@ class GuiAppApplication : public juce::JUCEApplication
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
-            setUsingNativeTitleBar(true);
+            setUsingNativeTitleBar(false);
             setContentOwned(new MainComponent(), true);
 
 #if JUCE_IOS || JUCE_ANDROID
