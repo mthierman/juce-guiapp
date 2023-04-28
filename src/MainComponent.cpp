@@ -1,7 +1,11 @@
 #include "MainComponent.h"
 
 //==============================================================================
-MainComponent::MainComponent() { setSize(600, 400); }
+MainComponent::MainComponent()
+{
+    setSize(600, 400);
+    setAudioChannels(0, 2);
+}
 
 //==============================================================================
 void MainComponent::paint(juce::Graphics &g)
