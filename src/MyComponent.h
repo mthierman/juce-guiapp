@@ -1,9 +1,5 @@
 #pragma once
 
-// CMake builds don't use an AppConfig.h, so it's safe to include juce module headers
-// directly. If you need to remain compatible with Projucer-generated builds, and
-// have called `juce_generate_juce_header(<thisTarget>)` in your CMakeLists.txt,
-// you could `#include <JuceHeader.h>` here instead, to make all your module headers visible.
 #include <juce_audio_basics/juce_audio_basics.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 #include <juce_audio_formats/juce_audio_formats.h>
@@ -21,10 +17,10 @@
     This component lives inside our window, and this is where you should put all
     your controls and content.
 */
-class MainComponent : public juce::AudioAppComponent, public juce::ChangeListener
+class MyComponent : public juce::AudioAppComponent, public juce::ChangeListener
 {
   public:
-    MainComponent() : state(Stopped)
+    MyComponent() : state(Stopped)
     {
         addAndMakeVisible(&openButton);
         openButton.setButtonText("Open...");
@@ -42,17 +38,15 @@ class MainComponent : public juce::AudioAppComponent, public juce::ChangeListene
         stopButton.setColour(juce::TextButton::buttonColourId, juce::Colours::red);
         stopButton.setEnabled(false);
 
+        setSize(300, 200);
+
         formatManager.registerBasicFormats();    // [1]
         transportSource.addChangeListener(this); // [2]
 
         setAudioChannels(0, 2);
     }
 
-    ~MainComponent() override { shutdownAudio(); }
-
-    void paint(juce::Graphics &) override;
-
-    void resized() override;
+    ~MyComponent() override { shutdownAudio(); }
 
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate) override
     {
@@ -71,6 +65,13 @@ class MainComponent : public juce::AudioAppComponent, public juce::ChangeListene
     }
 
     void releaseResources() override { transportSource.releaseResources(); }
+
+    void resized() override
+    {
+        openButton.setBounds(10, 10, getWidth() - 20, 20);
+        playButton.setBounds(10, 40, getWidth() - 20, 20);
+        stopButton.setBounds(10, 70, getWidth() - 20, 20);
+    }
 
     void changeListenerCallback(juce::ChangeBroadcaster *source) override
     {
@@ -167,5 +168,5 @@ class MainComponent : public juce::AudioAppComponent, public juce::ChangeListene
     juce::AudioTransportSource transportSource;
     TransportState state;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MyComponent)
 };
