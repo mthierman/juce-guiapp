@@ -15,13 +15,23 @@ class WebView2 : public juce::Component
         url.setSelectedId(Blank);
         url.onChange = [this] { urlChange(); };
 
-        addAndMakeVisible(mode);
-        mode.addSectionHeading("Mode");
-        mode.addItem("Dark", 1);
-        mode.addItem("Light", 2);
-        mode.addItem("System", 3);
-        mode.onChange = [this] { modeChange(); };
-        mode.setSelectedId(System);
+        // addAndMakeVisible(mode);
+        // mode.addSectionHeading("Mode");
+        // mode.addItem("Dark", 1);
+        // mode.addItem("Light", 2);
+        // mode.addItem("System", 3);
+        // mode.onChange = [this] { modeChange(); };
+        // mode.setSelectedId(System);
+
+        // auto dark = juce::Desktop::getInstance().isDarkModeActive();
+        // if (dark)
+        // {
+        //     setDarkTheme();
+        // }
+        // if (!dark)
+        // {
+        //     setLightTheme();
+        // }
 
         dataLocation =
             juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
@@ -30,10 +40,22 @@ class WebView2 : public juce::Component
             juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
                 .getChildFile("Test")
                 .getChildFile("WebView2Loader.dll");
+        // webView.reset(new juce::WebBrowserComponent(
+        //     options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+        //         .withWinWebView2Options(
+        //             optionsWebView2.withDLLLocation(dllLocation)
+        //                 .withUserDataFolder(dataLocation)
+        //                 .withBackgroundColour(
+        //                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+        //                         juce::ResizableWindow::backgroundColourId)))));
         webView.reset(new juce::WebBrowserComponent(
             options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
-                .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
-                                            .withUserDataFolder(dataLocation))));
+                .withWinWebView2Options(
+                    optionsWebView2.withDLLLocation(dllLocation)
+                        .withUserDataFolder(dataLocation)
+                        .withBackgroundColour(
+                            juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+                                juce::ResizableWindow::backgroundColourId)))));
         addAndMakeVisible(webView.get());
     }
 
@@ -42,7 +64,7 @@ class WebView2 : public juce::Component
     void resized() override
     {
         url.setBounds(5, 5, 400, 30);
-        mode.setBounds(450, 5, 400, 30);
+        // mode.setBounds(450, 5, 400, 30);
         webView->setBounds(0, 40, getWidth(), getHeight() - 40);
     }
 
@@ -68,42 +90,45 @@ class WebView2 : public juce::Component
         repaint();
     }
 
-    void modeChange()
-    {
-        auto dark = juce::Desktop::getInstance().isDarkModeActive();
-        switch (mode.getSelectedId())
-        {
-        case Dark:
-            // setLookAndFeel(&darkTheme);
-            // setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::black);
-            juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme);
-            break;
-        case Light:
-            // setLookAndFeel(&lightTheme);
-            // setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::white);
-            juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
-            break;
-        case System:
-            if (dark)
-            {
-                // setLookAndFeel(&darkTheme);
-                // setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::black);
-                juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme);
-            }
-            if (!dark)
-            {
-                // setLookAndFeel(&lightTheme);
-                // setColour(juce::ResizableWindow::backgroundColourId, juce::Colours::white);
-                juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
-            }
-            break;
-        default:
-            break;
-        }
-        repaint();
-    }
+    // void modeChange()
+    // {
+    //     auto dark = juce::Desktop::getInstance().isDarkModeActive();
+    //     switch (mode.getSelectedId())
+    //     {
+    //     case Dark:
+    //         setDarkTheme();
+    //         break;
+    //     case Light:
+    //         setLightTheme();
+    //         break;
+    //     case System:
+    //         if (dark)
+    //         {
+    //             setDarkTheme();
+    //         }
+    //         if (!dark)
+    //         {
+    //             setLightTheme();
+    //         }
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    //     repaint();
+    // }
+
+    // void setDarkTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme); }
+
+    // void setLightTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme); }
 
   private:
+    std::unique_ptr<juce::WebBrowserComponent> webView;
+    juce::File dataLocation;
+    juce::File dllLocation;
+    juce::WebBrowserComponent::Options options;
+    juce::WebBrowserComponent::Options::WinWebView2 optionsWebView2;
+
+    juce::ComboBox url;
     enum URL
     {
         Blank = 1,
@@ -112,20 +137,14 @@ class WebView2 : public juce::Component
         Ameo,
 
     };
-    enum Mode
-    {
-        Dark = 1,
-        Light,
-        System
-    };
 
-    std::unique_ptr<juce::WebBrowserComponent> webView;
-    juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
-    juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
-    juce::File dataLocation;
-    juce::File dllLocation;
-    juce::WebBrowserComponent::Options options;
-    juce::WebBrowserComponent::Options::WinWebView2 optionsWebView2;
-    juce::ComboBox url;
-    juce::ComboBox mode;
+    // juce::ComboBox mode;
+    // enum Mode
+    // {
+    //     Dark = 1,
+    //     Light,
+    //     System
+    // };
+    // juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
+    // juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
 };

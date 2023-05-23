@@ -35,6 +35,15 @@ class App : public juce::JUCEApplication
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
+            auto dark = juce::Desktop::getInstance().isDarkModeActive();
+            if (dark)
+            {
+                juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme);
+            }
+            if (!dark)
+            {
+                juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
+            }
             setUsingNativeTitleBar(true);
             setContentOwned(new WebView2(), false);
             setResizeLimits(640, 480, 800, 600);
@@ -50,14 +59,17 @@ class App : public juce::JUCEApplication
             JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
-        // void lookAndFeelChanged() override
-        // {
-        //     setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-        //         ResizableWindow::backgroundColourId));
-        //     repaint();
-        // }
+        void lookAndFeelChanged() override
+        {
+            setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+                ResizableWindow::backgroundColourId));
+            repaint();
+        }
 
       private:
+        juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
+        juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Window)
     };
 
