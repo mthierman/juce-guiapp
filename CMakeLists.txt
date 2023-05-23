@@ -1,30 +1,87 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(
+  VERSION
+  3.25
+)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+set(
+  CMAKE_CXX_STANDARD
+  20
+)
 
-project(Test VERSION 0.0.1 LANGUAGES C CXX ASM)
+set(
+  CMAKE_TRY_COMPILE_TARGET_TYPE
+  STATIC_LIBRARY
+)
 
-add_subdirectory(libs/JUCE EXCLUDE_FROM_ALL)
+project(
+  Test
+  VERSION
+  0.0.1
+  LANGUAGES
+  C
+  CXX
+  ASM
+)
 
-# add_subdirectory(libs/clap-juce-extensions EXCLUDE_FROM_ALL)
-math(EXPR BITNESS "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL)
-message(STATUS "C++${CMAKE_CXX_STANDARD}, CMake ${CMAKE_VERSION}, ${CMAKE_GENERATOR}, ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
-message(STATUS "${PROJECT_NAME} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}] v${PROJECT_VERSION}")
-file(WRITE ${CMAKE_BINARY_DIR}/version.txt "v${PROJECT_VERSION}")
+set(
+  LIBS
+  ${CMAKE_SOURCE_DIR}/libs
+)
+
+set(
+  EXTERNAL
+  ${CMAKE_SOURCE_DIR}/external
+)
+
+set(
+  WEBVIEW_PKG
+  "Microsoft.Web.WebView2"
+)
+
+set(
+  WEBVIEW_VER
+  "1.0.1774.30"
+)
+
+set(
+  WEBVIEW
+  "${WEBVIEW_PKG}.${WEBVIEW_VER}"
+)
+
+set(
+  WEBVIEW_LIB
+  WebView2Loader.dll
+)
+
+math(
+  EXPR
+  BITNESS
+  "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL
+)
+
+message(
+  STATUS
+  "${PROJECT_NAME} v${PROJECT_VERSION} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}]"
+)
+
+file(
+  WRITE
+  ${CMAKE_BINARY_DIR}/version.txt
+  "v${PROJECT_VERSION}"
+)
+
+execute_process(
+  COMMAND
+  nuget install ${WEBVIEW_PKG} -Version ${WEBVIEW_VER} -OutputDirectory ${EXTERNAL}
+)
+
+add_subdirectory(
+  ${LIBS}/JUCE
+  EXCLUDE_FROM_ALL
+)
 
 juce_add_gui_app(
   ${PROJECT_NAME}
-
-  # COMPANY_NAME ${PROJECT_NAME}
-  # PLUGIN_MANUFACTURER_CODE ${PROJECT_NAME}
-  # PLUGIN_CODE ${PROJECT_NAME}
-  # FORMATS VST3 Standalone
-  # PRODUCE_NAME ${PROJECT_NAME}
-  # IS_SYNTH TRUE
-  # NEEDS_MIDI_INPUT TRUE
-  # NEEDS_MIDI_OUTPUT TRUE
-  # IS_MIDI_EFFECT FALSE
 )
 
 target_sources(
@@ -36,11 +93,33 @@ target_sources(
 target_compile_definitions(
   ${PROJECT_NAME}
   PRIVATE
-  JUCE_WEB_BROWSER=0
+  JUCE_WEB_BROWSER=1
+  JUCE_USE_WIN_WEBVIEW2=1
   JUCE_USE_CURL=0
+  JUCE_DISPLAY_SPLASH_SCREEN=0
   JUCE_APPLICATION_NAME_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_PRODUCT_NAME>"
   JUCE_APPLICATION_VERSION_STRING="$<TARGET_PROPERTY:${PROJECT_NAME},JUCE_VERSION>"
 )
+
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC
+  ${EXTERNAL}/${WEBVIEW}/build/native/include
+)
+
+if(DEFINED ENV{ASIOSDK_DIR})
+  file(TO_CMAKE_PATH "$ENV{ASIOSDK_DIR}" ASIOSDK_DIR)
+  target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    ${ASIOSDK_DIR}/common
+  )
+  target_compile_definitions(
+    ${PROJECT_NAME}
+    PUBLIC
+    JUCE_ASIO=1
+  )
+endif()
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
@@ -55,37 +134,9 @@ target_link_libraries(${PROJECT_NAME}
   juce::juce_graphics
   juce::juce_gui_basics
   juce::juce_gui_extra
-
   PUBLIC
   juce::juce_recommended_config_flags
   juce::juce_recommended_lto_flags
   juce::juce_recommended_warning_flags
+  ${EXTERNAL}/${WEBVIEW}/build/native/x64/WebView2LoaderStatic.lib
 )
-
-# clap_juce_extensions_plugin(
-# TARGET ${PROJECT_NAME}
-# CLAP_ID "com.test.test"
-# CLAP_FEATURES note-effect
-# )
-
-#[[
-if(DEFINED ENV{ASIOSDK_DIR} OR POWERSHELL_ASIO)
-  if(POWERSHELL_ASIO)
-    execute_process(COMMAND pwsh -NoProfile -Command "& {Import-Module .\\scripts\\ASIO && asio}")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC JUCE_ASIO=1)
-    target_include_directories(${PROJECT_NAME} PUBLIC libs/asio/common)
-  else()
-    message(STATUS "Checking for Steinberg ASIO SDK")
-
-    if(EXISTS "$ENV{ASIOSDK_DIR}/readme.txt")
-      file(TO_CMAKE_PATH "$ENV{ASIOSDK_DIR}" ASIOSDK_DIR)
-      message(STATUS "Steinberg ASIO SDK location: ${ASIOSDK_DIR}")
-      message(STATUS "The resulting standalone executables are not licensed for distribution")
-      target_compile_definitions(${PROJECT_NAME} PUBLIC JUCE_ASIO=1)
-      target_include_directories(${PROJECT_NAME} PUBLIC ${ASIOSDK_DIR}/common)
-    else()
-      message(STATUS "Steinberg ASIO SDK not found")
-    endif()
-  endif()
-endif()
-]]
