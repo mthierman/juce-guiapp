@@ -1,0 +1,67 @@
+#include "WebView.hpp"
+
+class GuiAppApplication : public juce::JUCEApplication
+{
+  public:
+    GuiAppApplication() {}
+
+    const juce::String getApplicationName() override { return JUCE_APPLICATION_NAME_STRING; }
+
+    const juce::String getApplicationVersion() override { return JUCE_APPLICATION_VERSION_STRING; }
+
+    bool moreThanOneInstanceAllowed() override { return true; }
+
+    void initialise(const juce::String &commandLine) override
+    {
+        juce::ignoreUnused(commandLine);
+        mainWindow.reset(new MainWindow(getApplicationName()));
+    }
+
+    void shutdown() override { mainWindow = nullptr; }
+
+    void systemRequestedQuit() override { quit(); }
+
+    void anotherInstanceStarted(const juce::String &commandLine) override
+    {
+        juce::ignoreUnused(commandLine);
+    }
+
+    class MainWindow : public juce::DocumentWindow
+    {
+      public:
+        explicit MainWindow(juce::String name)
+            : DocumentWindow(name,
+                             juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+                                 ResizableWindow::backgroundColourId),
+                             DocumentWindow::allButtons)
+        {
+            auto dark = juce::Desktop::getInstance().isDarkModeActive();
+            if (dark)
+                setLookAndFeel(&darkTheme);
+            if (!dark)
+                setLookAndFeel(&lightTheme);
+            setUsingNativeTitleBar(true);
+            setContentOwned(new WebView2(), false);
+            setResizeLimits(640, 480, 1920, 1080);
+            setResizable(true, true);
+            centreWithSize(getWidth(), getHeight());
+            setVisible(true);
+        }
+
+        ~MainWindow() override { setLookAndFeel(nullptr); }
+
+        void closeButtonPressed() override
+        {
+            JUCEApplication::getInstance()->systemRequestedQuit();
+        }
+
+      private:
+        juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
+        juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
+
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
+    };
+
+  private:
+    std::unique_ptr<MainWindow> mainWindow;
+};
