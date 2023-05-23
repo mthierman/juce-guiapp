@@ -44,10 +44,10 @@ class App : public juce::JUCEApplication
             {
                 juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
             }
-            setUsingNativeTitleBar(true);
-            setContentOwned(new WebView2(), false);
+            setUsingNativeTitleBar(false);
+            setContentOwned(new WebView(), false);
             setResizeLimits(640, 480, 800, 600);
-            setResizable(true, true);
+            setResizable(true, false);
             centreWithSize(getWidth(), getHeight());
             setVisible(true);
         }
