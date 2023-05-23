@@ -1,6 +1,23 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
 
+class Browser : public juce::WebBrowserComponent
+{
+  public:
+    using WebBrowserComponent::WebBrowserComponent;
+
+    void paint(juce::Graphics &g) override
+    {
+        g.fillAll(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+            juce::ResizableWindow::backgroundColourId));
+    }
+
+    void lookAndFeelChanged() override { repaint(); }
+
+  private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
+};
+
 class WebView2 : public juce::Component
 {
   public:
@@ -48,18 +65,27 @@ class WebView2 : public juce::Component
         //                 .withBackgroundColour(
         //                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
         //                         juce::ResizableWindow::backgroundColourId)))));
-        webView.reset(new juce::WebBrowserComponent(
-            options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
-                .withWinWebView2Options(
-                    optionsWebView2.withDLLLocation(dllLocation)
-                        .withUserDataFolder(dataLocation)
-                        .withBackgroundColour(
-                            juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-                                juce::ResizableWindow::backgroundColourId)))));
+        // webView.reset(new Browser(
+        //     options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+        //         .withWinWebView2Options(
+        //             optionsWebView2.withDLLLocation(dllLocation)
+        //                 .withUserDataFolder(dataLocation)
+        //                 .withBackgroundColour(
+        //                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+        //                         juce::ResizableWindow::backgroundColourId)))));
+        webView.reset(
+            new Browser(options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+                            .withWinWebView2Options(
+                                optionsWebView2.withDLLLocation(dllLocation)
+                                    .withUserDataFolder(dataLocation)
+                                    .withBackgroundColour(juce::Colours::transparentWhite))));
         addAndMakeVisible(webView.get());
+        // setOpaque(true);
     }
 
     ~WebView2() override { setLookAndFeel(nullptr); }
+
+    // void paint(juce::Graphics &g) override { g.fillAll(juce::Colours::blue); }
 
     void resized() override
     {
@@ -122,11 +148,11 @@ class WebView2 : public juce::Component
     // void setLightTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme); }
 
   private:
-    std::unique_ptr<juce::WebBrowserComponent> webView;
+    std::unique_ptr<Browser> webView;
     juce::File dataLocation;
     juce::File dllLocation;
-    juce::WebBrowserComponent::Options options;
-    juce::WebBrowserComponent::Options::WinWebView2 optionsWebView2;
+    Browser::Options options;
+    Browser::Options::WinWebView2 optionsWebView2;
 
     juce::ComboBox url;
     enum URL
