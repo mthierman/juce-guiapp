@@ -4,9 +4,13 @@ class GuiAppApplication : public juce::JUCEApplication
 {
   public:
     GuiAppApplication() {}
+
     const juce::String getApplicationName() override { return JUCE_APPLICATION_NAME_STRING; }
+
     const juce::String getApplicationVersion() override { return JUCE_APPLICATION_VERSION_STRING; }
+
     bool moreThanOneInstanceAllowed() override { return true; }
+
     void initialise(const juce::String &commandLine) override
     {
         juce::ignoreUnused(commandLine);
@@ -31,8 +35,9 @@ class GuiAppApplication : public juce::JUCEApplication
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
-            setUsingNativeTitleBar(false);
-            setContentOwned(new WebView2(), true);
+            setUsingNativeTitleBar(true);
+            setContentOwned(new WebView2(), false);
+            setResizeLimits(640, 480, 1920, 1080);
             setResizable(true, true);
             centreWithSize(getWidth(), getHeight());
             setVisible(true);
