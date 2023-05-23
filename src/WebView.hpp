@@ -6,14 +6,6 @@ class Browser : public juce::WebBrowserComponent
   public:
     using WebBrowserComponent::WebBrowserComponent;
 
-    void paint(juce::Graphics &g) override
-    {
-        g.fillAll(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-            juce::ResizableWindow::backgroundColourId));
-    }
-
-    void lookAndFeelChanged() override { repaint(); }
-
   private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
 };
@@ -32,23 +24,13 @@ class WebView2 : public juce::Component
         url.setSelectedId(Blank);
         url.onChange = [this] { urlChange(); };
 
-        // addAndMakeVisible(mode);
-        // mode.addSectionHeading("Mode");
-        // mode.addItem("Dark", 1);
-        // mode.addItem("Light", 2);
-        // mode.addItem("System", 3);
-        // mode.onChange = [this] { modeChange(); };
-        // mode.setSelectedId(System);
-
-        // auto dark = juce::Desktop::getInstance().isDarkModeActive();
-        // if (dark)
-        // {
-        //     setDarkTheme();
-        // }
-        // if (!dark)
-        // {
-        //     setLightTheme();
-        // }
+        addAndMakeVisible(mode);
+        mode.addSectionHeading("Mode");
+        mode.addItem("Dark", 1);
+        mode.addItem("Light", 2);
+        mode.addItem("System", 3);
+        mode.onChange = [this] { modeChange(); };
+        mode.setSelectedId(System);
 
         dataLocation =
             juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
@@ -57,42 +39,24 @@ class WebView2 : public juce::Component
             juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
                 .getChildFile("Test")
                 .getChildFile("WebView2Loader.dll");
-        // webView.reset(new juce::WebBrowserComponent(
-        //     options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
-        //         .withWinWebView2Options(
-        //             optionsWebView2.withDLLLocation(dllLocation)
-        //                 .withUserDataFolder(dataLocation)
-        //                 .withBackgroundColour(
-        //                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-        //                         juce::ResizableWindow::backgroundColourId)))));
-        // webView.reset(new Browser(
-        //     options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
-        //         .withWinWebView2Options(
-        //             optionsWebView2.withDLLLocation(dllLocation)
-        //                 .withUserDataFolder(dataLocation)
-        //                 .withBackgroundColour(
-        //                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-        //                         juce::ResizableWindow::backgroundColourId)))));
-        webView.reset(
-            new Browser(options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
-                            .withWinWebView2Options(
-                                optionsWebView2.withDLLLocation(dllLocation)
-                                    .withUserDataFolder(dataLocation)
-                                    .withBackgroundColour(juce::Colours::transparentWhite))));
+        webView.reset(new Browser(
+            options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+                .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
+                                            .withUserDataFolder(dataLocation)
+                                            .withBackgroundColour(juce::Colours::black))));
         addAndMakeVisible(webView.get());
-        // setOpaque(true);
     }
 
     ~WebView2() override { setLookAndFeel(nullptr); }
 
-    // void paint(juce::Graphics &g) override { g.fillAll(juce::Colours::blue); }
-
     void resized() override
     {
-        url.setBounds(5, 5, 400, 30);
-        // mode.setBounds(450, 5, 400, 30);
+        url.setBounds(5, 5, 100, 30);
+        mode.setBounds(getBounds().getWidth() - 105, 5, 100, 30);
         webView->setBounds(0, 40, getWidth(), getHeight() - 40);
     }
+
+    void lookAndFeelChanged() override { repaint(); }
 
     void urlChange()
     {
@@ -116,36 +80,36 @@ class WebView2 : public juce::Component
         repaint();
     }
 
-    // void modeChange()
-    // {
-    //     auto dark = juce::Desktop::getInstance().isDarkModeActive();
-    //     switch (mode.getSelectedId())
-    //     {
-    //     case Dark:
-    //         setDarkTheme();
-    //         break;
-    //     case Light:
-    //         setLightTheme();
-    //         break;
-    //     case System:
-    //         if (dark)
-    //         {
-    //             setDarkTheme();
-    //         }
-    //         if (!dark)
-    //         {
-    //             setLightTheme();
-    //         }
-    //         break;
-    //     default:
-    //         break;
-    //     }
-    //     repaint();
-    // }
+    void modeChange()
+    {
+        auto dark = juce::Desktop::getInstance().isDarkModeActive();
+        switch (mode.getSelectedId())
+        {
+        case Dark:
+            setDarkTheme();
+            break;
+        case Light:
+            setLightTheme();
+            break;
+        case System:
+            if (dark)
+            {
+                setDarkTheme();
+            }
+            if (!dark)
+            {
+                setLightTheme();
+            }
+            break;
+        default:
+            break;
+        }
+        repaint();
+    }
 
-    // void setDarkTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme); }
+    void setDarkTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme); }
 
-    // void setLightTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme); }
+    void setLightTheme() { juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme); }
 
   private:
     std::unique_ptr<Browser> webView;
@@ -164,13 +128,13 @@ class WebView2 : public juce::Component
 
     };
 
-    // juce::ComboBox mode;
-    // enum Mode
-    // {
-    //     Dark = 1,
-    //     Light,
-    //     System
-    // };
-    // juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
-    // juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
+    juce::ComboBox mode;
+    enum Mode
+    {
+        Dark = 1,
+        Light,
+        System
+    };
+    juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
+    juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
 };
