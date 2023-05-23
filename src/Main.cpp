@@ -1,3 +1,3 @@
 #include "Main.hpp"
 
-START_JUCE_APPLICATION(GuiAppApplication)
+START_JUCE_APPLICATION(App)

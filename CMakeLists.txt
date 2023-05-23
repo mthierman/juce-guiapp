@@ -14,7 +14,7 @@ set(
 )
 
 project(
-  Test
+  Gooey
   VERSION
   0.0.1
   LANGUAGES
@@ -82,6 +82,8 @@ add_subdirectory(
 
 juce_add_gui_app(
   ${PROJECT_NAME}
+  ICON_BIG ${CMAKE_SOURCE_DIR}/data/icon.svg
+  ICON_SMALL ${CMAKE_SOURCE_DIR}/data/icon.svg
 )
 
 target_sources(

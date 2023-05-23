@@ -1,9 +1,9 @@
 #include "WebView.hpp"
 
-class GuiAppApplication : public juce::JUCEApplication
+class App : public juce::JUCEApplication
 {
   public:
-    GuiAppApplication() {}
+    App() {}
 
     const juce::String getApplicationName() override { return JUCE_APPLICATION_NAME_STRING; }
 
@@ -14,7 +14,7 @@ class GuiAppApplication : public juce::JUCEApplication
     void initialise(const juce::String &commandLine) override
     {
         juce::ignoreUnused(commandLine);
-        mainWindow.reset(new MainWindow(getApplicationName()));
+        mainWindow.reset(new Window(getApplicationName()));
     }
 
     void shutdown() override { mainWindow = nullptr; }
@@ -26,42 +26,41 @@ class GuiAppApplication : public juce::JUCEApplication
         juce::ignoreUnused(commandLine);
     }
 
-    class MainWindow : public juce::DocumentWindow
+    class Window : public juce::DocumentWindow
     {
       public:
-        explicit MainWindow(juce::String name)
+        explicit Window(juce::String name)
             : DocumentWindow(name,
                              juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
-            auto dark = juce::Desktop::getInstance().isDarkModeActive();
-            if (dark)
-                setLookAndFeel(&darkTheme);
-            if (!dark)
-                setLookAndFeel(&lightTheme);
             setUsingNativeTitleBar(true);
             setContentOwned(new WebView2(), false);
-            setResizeLimits(640, 480, 1920, 1080);
+            setResizeLimits(640, 480, 800, 600);
             setResizable(true, true);
             centreWithSize(getWidth(), getHeight());
             setVisible(true);
         }
 
-        ~MainWindow() override { setLookAndFeel(nullptr); }
+        ~Window() override { setLookAndFeel(nullptr); }
 
         void closeButtonPressed() override
         {
             JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
-      private:
-        juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
-        juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
+        // void lookAndFeelChanged() override
+        // {
+        //     setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+        //         ResizableWindow::backgroundColourId));
+        //     repaint();
+        // }
 
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
+      private:
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Window)
     };
 
   private:
-    std::unique_ptr<MainWindow> mainWindow;
+    std::unique_ptr<Window> mainWindow;
 };
