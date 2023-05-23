@@ -1,0 +1,32 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://wixtoolset.org/schemas/v4/wxs https://raw.githubusercontent.com/wixtoolset/web/master/src/xsd4/wix.xsd">
+    <Package Name="Test" Manufacturer="Test" UpgradeCode="EC1C9C5C-B2F4-4EF7-BDD2-B498301A002D"
+        Version="0.0.1" InstallerVersion="500">
+
+        <StandardDirectory Id="ProgramFiles6432Folder">
+            <Directory Id="Standalone" Name="Test" />
+        </StandardDirectory>
+        <StandardDirectory Id="CommonFiles6432Folder">
+            <Directory Id="VST3" Name="VST3" />
+        </StandardDirectory>
+        <StandardDirectory Id="CommonFiles6432Folder">
+            <Directory Id="CLAP" Name="CLAP" />
+        </StandardDirectory>
+
+        <MediaTemplate EmbedCab="yes" />
+
+        <Feature Id="Main">
+            <Component Directory="Standalone">
+                <File Source="build/Release/Test_artefacts/Release/Standalone/Test.exe" />
+            </Component>
+            <Component Directory="VST3">
+                <File
+                    Source="build/Release/Test_artefacts/Release/VST3/Test.vst3/Contents/x86_64-win/Test.vst3" />
+            </Component>
+            <Component Directory="CLAP">
+                <File Source="build/Release/Test_artefacts/Release/CLAP/Test.clap" />
+            </Component>
+        </Feature>
+    </Package>
+</Wix>
