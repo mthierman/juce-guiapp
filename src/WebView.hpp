@@ -1,7 +1,17 @@
 #pragma once
 
+#include "juce_core/system/juce_PlatformDefs.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
+
+class Browser : public juce::WebBrowserComponent
+{
+  public:
+    using WebBrowserComponent::WebBrowserComponent;
+
+  private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
+};
 
 class WebView : public juce::Component
 {
@@ -15,8 +25,8 @@ class WebView : public juce::Component
             juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
                 .getChildFile("Test")
                 .getChildFile("WebView2Loader.dll");
-        webView.reset(new juce::WebBrowserComponent(
-            options.withBackend(juce::WebBrowserComponent::Options::Backend::webview2)
+        webView.reset(new Browser(
+            options.withBackend(Browser::Options::Backend::webview2)
                 .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
                                             .withUserDataFolder(dataLocation)
                                             .withBackgroundColour(juce::Colours::black))));
@@ -30,6 +40,10 @@ class WebView : public juce::Component
         url.addItem("synth.ameo.dev", 4);
         url.setSelectedId(Blank);
         url.onChange = [this] { urlChange(); };
+
+        addAndMakeVisible(addressBar);
+        addressBar.setTextToShowWhenEmpty("Enter a URL", juce::Colours::red);
+        addressBar.onReturnKey = [this] { webView->goToURL(addressBar.getText()); };
     }
 
     ~WebView() override { setLookAndFeel(nullptr); }
@@ -37,7 +51,9 @@ class WebView : public juce::Component
     void resized() override
     {
         webView->setBounds(0, 0, getWidth(), getHeight() - 40);
+
         url.setBounds(5, getBounds().getHeight() - 35, 200, 30);
+        addressBar.setBounds(210, getBounds().getHeight() - 35, getWidth() - 215, 30);
     }
 
     void lookAndFeelChanged() override { repaint(); }
@@ -64,11 +80,12 @@ class WebView : public juce::Component
     }
 
   private:
-    std::unique_ptr<juce::WebBrowserComponent> webView;
+    std::unique_ptr<Browser> webView;
     juce::File dataLocation;
     juce::File dllLocation;
-    juce::WebBrowserComponent::Options options;
-    juce::WebBrowserComponent::Options::WinWebView2 optionsWebView2;
+    Browser::Options options;
+    Browser::Options::WinWebView2 optionsWebView2;
+
     juce::ComboBox url;
     enum Page
     {
@@ -77,6 +94,8 @@ class WebView : public juce::Component
         Dotpiano,
         Ameo,
     };
+
+    juce::TextEditor addressBar;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };
