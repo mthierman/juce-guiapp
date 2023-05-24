@@ -35,7 +35,7 @@ class App : public juce::JUCEApplication
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
-            setUsingNativeTitleBar(false);
+            setUsingNativeTitleBar(true);
             setContentOwned(new Content(), false);
             setResizeLimits(640, 480, 800, 600);
             setResizable(true, false);
