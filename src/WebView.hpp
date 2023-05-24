@@ -42,7 +42,10 @@ class WebView : public juce::Component
         url.onChange = [this] { urlChange(); };
 
         addAndMakeVisible(addressBar);
-        addressBar.setTextToShowWhenEmpty("Enter a URL", juce::Colours::red);
+        // addressBar.setTextToShowWhenEmpty(
+        //     "Enter a URL", juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+        //                        juce::TextEditor::textColourId));
+        addressBar.setJustification(juce::Justification::centred);
         addressBar.onReturnKey = [this] { webView->goToURL(addressBar.getText()); };
     }
 
@@ -51,7 +54,6 @@ class WebView : public juce::Component
     void resized() override
     {
         webView->setBounds(0, 0, getWidth(), getHeight() - 40);
-
         url.setBounds(5, getBounds().getHeight() - 35, 200, 30);
         addressBar.setBounds(210, getBounds().getHeight() - 35, getWidth() - 215, 30);
     }
