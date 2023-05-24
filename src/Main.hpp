@@ -1,4 +1,5 @@
 #include "WebView.hpp"
+#include "Theme.h"
 
 class App : public juce::JUCEApplication
 {
@@ -35,15 +36,6 @@ class App : public juce::JUCEApplication
                                  ResizableWindow::backgroundColourId),
                              DocumentWindow::allButtons)
         {
-            auto dark = juce::Desktop::getInstance().isDarkModeActive();
-            if (dark)
-            {
-                juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme);
-            }
-            if (!dark)
-            {
-                juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
-            }
             setUsingNativeTitleBar(false);
             setContentOwned(new WebView(), false);
             setResizeLimits(640, 480, 800, 600);
@@ -67,9 +59,6 @@ class App : public juce::JUCEApplication
         }
 
       private:
-        juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
-        juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getGreyColourScheme();
-
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Window)
     };
 
