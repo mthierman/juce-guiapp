@@ -19,6 +19,8 @@ class ThemeSwitcher : public juce::Component
         mode.setSelectedId(System);
     }
 
+    void resized() override { mode.setBounds(0, 0, getWidth(), getHeight()); }
+
     void modeChange()
     {
         auto dark = juce::Desktop::getInstance().isDarkModeActive();

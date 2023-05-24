@@ -1,5 +1,4 @@
-#include "WebView.hpp"
-#include "Theme.h"
+#include "Content.hpp"
 
 class App : public juce::JUCEApplication
 {
@@ -37,7 +36,7 @@ class App : public juce::JUCEApplication
                              DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar(false);
-            setContentOwned(new WebView(), false);
+            setContentOwned(new Content(), false);
             setResizeLimits(640, 480, 800, 600);
             setResizable(true, false);
             centreWithSize(getWidth(), getHeight());

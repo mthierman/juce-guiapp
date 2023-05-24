@@ -21,13 +21,47 @@ class WebView : public juce::Component
                                             .withUserDataFolder(dataLocation)
                                             .withBackgroundColour(juce::Colours::black))));
         addAndMakeVisible(webView.get());
+
+        addAndMakeVisible(url);
+        url.addSectionHeading("URL");
+        url.addItem("about:blank", 1);
+        url.addItem("example.com", 2);
+        url.addItem("dotpiano.com", 3);
+        url.addItem("synth.ameo.dev", 4);
+        url.setSelectedId(Blank);
+        url.onChange = [this] { urlChange(); };
     }
 
     ~WebView() override { setLookAndFeel(nullptr); }
 
-    void resized() override { webView->setBounds(0, 0, getWidth(), getHeight()); }
+    void resized() override
+    {
+        webView->setBounds(0, 0, getWidth(), getHeight() - 40);
+        url.setBounds(5, getBounds().getHeight() - 35, 200, 30);
+    }
 
     void lookAndFeelChanged() override { repaint(); }
+
+    void urlChange()
+    {
+        switch (url.getSelectedId())
+        {
+        case Blank:
+            webView->goToURL("about:blank");
+            break;
+        case Example:
+            webView->goToURL("https://example.com/");
+            break;
+        case Dotpiano:
+            webView->goToURL("https://dotpiano.com/");
+            break;
+        case Ameo:
+            webView->goToURL("https://synth.ameo.dev/");
+            break;
+        default:
+            break;
+        }
+    }
 
   private:
     std::unique_ptr<juce::WebBrowserComponent> webView;
@@ -35,6 +69,14 @@ class WebView : public juce::Component
     juce::File dllLocation;
     juce::WebBrowserComponent::Options options;
     juce::WebBrowserComponent::Options::WinWebView2 optionsWebView2;
+    juce::ComboBox url;
+    enum Page
+    {
+        Blank = 1,
+        Example,
+        Dotpiano,
+        Ameo,
+    };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };
