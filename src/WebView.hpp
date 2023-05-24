@@ -1,15 +1,26 @@
 #pragma once
 
-#include "juce_core/system/juce_PlatformDefs.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_gui_extra/juce_gui_extra.h>
 
 class Browser : public juce::WebBrowserComponent
 {
   public:
-    using WebBrowserComponent::WebBrowserComponent;
+    Browser(Options options, juce::TextEditor &addressBox)
+        : juce::WebBrowserComponent(options), addressBar(addressBox)
+    {
+    }
+
+    bool pageAboutToLoad(const juce::String &newURL) override
+    {
+        addressBar.setText(newURL, false);
+        return true;
+    }
+
+    void newWindowAttemptingToLoad(const juce::String &newURL) override { goToURL(newURL); }
 
   private:
+    juce::TextEditor &addressBar;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
 };
 
@@ -29,7 +40,8 @@ class WebView : public juce::Component
             options.withBackend(Browser::Options::Backend::webview2)
                 .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
                                             .withUserDataFolder(dataLocation)
-                                            .withBackgroundColour(juce::Colours::black))));
+                                            .withBackgroundColour(juce::Colours::black)),
+            addressBar));
         addAndMakeVisible(webView.get());
 
         addAndMakeVisible(url);
@@ -42,11 +54,8 @@ class WebView : public juce::Component
         url.onChange = [this] { urlChange(); };
 
         addAndMakeVisible(addressBar);
-        // addressBar.setTextToShowWhenEmpty(
-        //     "Enter a URL", juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-        //                        juce::TextEditor::textColourId));
-        addressBar.setJustification(juce::Justification::centred);
-        addressBar.onReturnKey = [this] { webView->goToURL(addressBar.getText()); };
+        addressBar.setJustification(juce::Justification::verticallyCentred);
+        addressBar.onReturnKey = [this] { navigate(addressBar.getText()); };
     }
 
     ~WebView() override { setLookAndFeel(nullptr); }
@@ -79,6 +88,23 @@ class WebView : public juce::Component
         default:
             break;
         }
+    }
+
+    void navigate(juce::String checkUrl)
+    {
+        if (checkUrl.contains("http://"))
+        {
+            webView->goToURL(checkUrl);
+        };
+        if (checkUrl.contains("https://"))
+        {
+            webView->goToURL(checkUrl);
+        };
+        if (!checkUrl.contains("http://") || !checkUrl.contains("https://"))
+        {
+            auto https = "https://" + checkUrl;
+            webView->goToURL(https);
+        };
     }
 
   private:
