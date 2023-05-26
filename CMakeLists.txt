@@ -18,7 +18,7 @@ file(WRITE ${CMAKE_BINARY_DIR}/version.txt "v${PROJECT_VERSION}")
 
 execute_process(
   COMMAND
-  nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory external
+  nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory ${CMAKE_SOURCE_DIR}/external
 )
 
 add_subdirectory(
@@ -69,18 +69,11 @@ if(DEFINED ENV{ASIOSDK_DIR})
   )
 endif()
 
-target_link_directories(
-  ${PROJECT_NAME}
-  PRIVATE
-  external/${WEBVIEW_LIB}/build/native/x64
-)
-
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE
   juce::juce_gui_basics
   juce::juce_gui_extra
-  WebView2LoaderStatic.lib
   PUBLIC
   juce::juce_recommended_config_flags
   juce::juce_recommended_lto_flags
