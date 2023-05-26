@@ -1,82 +1,28 @@
-cmake_minimum_required(
-  VERSION
-  3.25
-)
-
-set(
-  CMAKE_CXX_STANDARD
-  20
-)
-
-set(
-  CMAKE_TRY_COMPILE_TARGET_TYPE
-  STATIC_LIBRARY
-)
+cmake_minimum_required(VERSION 3.25)
+set(CMAKE_CXX_STANDARD 20)
 
 project(
   Gooey
-  VERSION
-  0.0.1
-  LANGUAGES
-  C
-  CXX
-  ASM
+  VERSION 0.0.1
+  LANGUAGES C CXX ASM
 )
 
-set(
-  LIBS
-  ${CMAKE_SOURCE_DIR}/libs
-)
+set(WEBVIEW "Microsoft.Web.WebView2")
+set(WEBVIEW_VER "1.0.1774.30")
+set(WEBVIEW_LIB "${WEBVIEW}.${WEBVIEW_VER}")
+set(WEBVIEW_DLL WebView2Loader.dll)
 
-set(
-  EXTERNAL
-  ${CMAKE_SOURCE_DIR}/external
-)
-
-set(
-  WEBVIEW_PKG
-  "Microsoft.Web.WebView2"
-)
-
-set(
-  WEBVIEW_VER
-  "1.0.1774.30"
-)
-
-set(
-  WEBVIEW
-  "${WEBVIEW_PKG}.${WEBVIEW_VER}"
-)
-
-set(
-  WEBVIEW_LIB
-  WebView2Loader.dll
-)
-
-math(
-  EXPR
-  BITNESS
-  "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL
-)
-
-message(
-  STATUS
-  "${PROJECT_NAME} v${PROJECT_VERSION} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}]"
-)
-
-file(
-  WRITE
-  ${CMAKE_BINARY_DIR}/version.txt
-  "v${PROJECT_VERSION}"
-)
+math(EXPR BITNESS "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL)
+message(STATUS "${PROJECT_NAME} v${PROJECT_VERSION} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}]")
+file(WRITE ${CMAKE_BINARY_DIR}/version.txt "v${PROJECT_VERSION}")
 
 execute_process(
   COMMAND
-  nuget install ${WEBVIEW_PKG} -Version ${WEBVIEW_VER} -OutputDirectory ${EXTERNAL}
+  nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory external
 )
 
 add_subdirectory(
-  ${LIBS}/JUCE
+  libs/JUCE
   EXCLUDE_FROM_ALL
 )
 
@@ -105,31 +51,38 @@ target_compile_definitions(
 
 target_include_directories(
   ${PROJECT_NAME}
-  PUBLIC
-  ${EXTERNAL}/${WEBVIEW}/build/native/include
+  PRIVATE
+  external/${WEBVIEW_LIB}/build/native/include
 )
 
 if(DEFINED ENV{ASIOSDK_DIR})
   file(TO_CMAKE_PATH "$ENV{ASIOSDK_DIR}" ASIOSDK_DIR)
-  target_include_directories(
-    ${PROJECT_NAME}
-    PUBLIC
-    ${ASIOSDK_DIR}/common
-  )
   target_compile_definitions(
     ${PROJECT_NAME}
-    PUBLIC
+    PRIVATE
     JUCE_ASIO=1
+  )
+  target_include_directories(
+    ${PROJECT_NAME}
+    PRIVATE
+    ${ASIOSDK_DIR}/common
   )
 endif()
 
-target_link_libraries(${PROJECT_NAME}
+target_link_directories(
+  ${PROJECT_NAME}
+  PRIVATE
+  external/${WEBVIEW_LIB}/build/native/x64
+)
+
+target_link_libraries(
+  ${PROJECT_NAME}
   PRIVATE
   juce::juce_gui_basics
   juce::juce_gui_extra
+  WebView2LoaderStatic.lib
   PUBLIC
   juce::juce_recommended_config_flags
   juce::juce_recommended_lto_flags
   juce::juce_recommended_warning_flags
-  ${EXTERNAL}/${WEBVIEW}/build/native/x64/WebView2LoaderStatic.lib
 )
