@@ -30,9 +30,11 @@ App::Window::Window(juce::String name)
                          ResizableWindow::backgroundColourId),
                      DocumentWindow::allButtons)
 {
-    setUsingNativeTitleBar(true);
+    setUsingNativeTitleBar(false);
     setContentOwned(new MainComponent(), false);
-    setResizeLimits(640, 480, 800, 600);
+    setResizeLimits(640, 480,
+                    juce::Desktop::getInstance().getDisplays().getTotalBounds(true).getWidth(),
+                    juce::Desktop::getInstance().getDisplays().getTotalBounds(true).getHeight());
     setResizable(true, false);
     centreWithSize(getWidth(), getHeight());
     setVisible(true);
