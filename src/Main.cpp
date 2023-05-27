@@ -1,16 +1,19 @@
-#include "Windows.h"
+// #if WINDOWS
+// #include "Windows.h"
+// #endif
+
 #include "Main.hpp"
 #include "MainComponent.hpp"
 
 App::App()
 {
-    SetEnvironmentVariableW(L"WEBVIEW2_DEFAULT_BACKGROUND_COLOR", L"0");
-    SetEnvironmentVariableW(L"WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
-                            L"--enable-features=OverlayScrollbar,"
-                            L"msOverlayScrollbarWinStyle:scrollbar_mode/"
-                            L"full_mode,msOverlayScrollbarWinStyleAnimation,"
-                            L"msWebView2BrowserHitTransparent"
-                            L" --disable-features=msWebOOUI,msPdfOOUI");
+    // SetEnvironmentVariableW(L"WEBVIEW2_DEFAULT_BACKGROUND_COLOR", L"0");
+    // SetEnvironmentVariableW(L"WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS",
+    //                         L"--enable-features=OverlayScrollbar,"
+    //                         L"msOverlayScrollbarWinStyle:scrollbar_mode/"
+    //                         L"full_mode,msOverlayScrollbarWinStyleAnimation,"
+    //                         L"msWebView2BrowserHitTransparent"
+    //                         L" --disable-features=msWebOOUI,msPdfOOUI");
 }
 
 const juce::String App::getApplicationName() { return JUCE_APPLICATION_NAME_STRING; }

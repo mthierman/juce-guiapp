@@ -4,12 +4,13 @@ class Browser : public juce::WebBrowserComponent
 {
   public:
     Browser(Options options, juce::TextEditor &addressBox);
+    void paint(juce::Graphics &) override;
     bool pageAboutToLoad(const juce::String &newURL) override;
     void newWindowAttemptingToLoad(const juce::String &newURL) override;
 
   private:
     juce::TextEditor &addressBar;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
 };
 
@@ -18,6 +19,7 @@ class WebView : public juce::Component
   public:
     WebView();
     ~WebView() override;
+    void paint(juce::Graphics &) override;
     void resized() override;
     void lookAndFeelChanged() override;
     void urlChange();

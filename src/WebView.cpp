@@ -5,6 +5,11 @@ Browser::Browser(Options options, juce::TextEditor &addressBox)
 {
 }
 
+void Browser::paint(juce::Graphics &g)
+{
+    // g.fillAll(juce::Colours::yellow);
+}
+
 bool Browser::pageAboutToLoad(const juce::String &newURL)
 {
     addressBar.setText(newURL, false);
@@ -22,12 +27,17 @@ WebView::WebView()
         juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
             .getChildFile("Test")
             .getChildFile("WebView2Loader.dll");
-    webView.reset(
-        new Browser(options.withBackend(Browser::Options::Backend::webview2)
-                        .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
-                                                    .withUserDataFolder(dataLocation)
-                                                    .withBackgroundColour(juce::Colours::black)),
-                    addressBar));
+    webView.reset(new Browser(
+        options
+            .withBackend(Browser::Options::Backend::webview2)
+            // .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
+            //                             .withUserDataFolder(dataLocation)
+            //                             .withBackgroundColour(getLookAndFeel().findColour(
+            //                                 juce::ResizableWindow::backgroundColourId))),
+            .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
+                                        .withUserDataFolder(dataLocation)
+                                        .withBackgroundColour(juce::Colours::black)),
+        addressBar));
     addAndMakeVisible(webView.get());
 
     addAndMakeVisible(url);
@@ -45,6 +55,11 @@ WebView::WebView()
 }
 
 WebView::~WebView() { setLookAndFeel(nullptr); }
+
+void WebView::paint(juce::Graphics &g)
+{
+    // g.fillAll(juce::Colours::yellow);
+}
 
 void WebView::resized()
 {

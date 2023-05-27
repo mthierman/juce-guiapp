@@ -56,6 +56,7 @@ target_compile_definitions(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
+  libs/choc/platform
   external/${WEBVIEW_LIB}/build/native/include
 )
 
