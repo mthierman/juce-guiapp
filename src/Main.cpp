@@ -1,68 +1,52 @@
+#include "Main.hpp"
 #include "MainComponent.hpp"
 
-class App : public juce::JUCEApplication
+App::App() {}
+
+const juce::String App::getApplicationName() { return JUCE_APPLICATION_NAME_STRING; }
+
+const juce::String App::getApplicationVersion() { return JUCE_APPLICATION_VERSION_STRING; }
+
+bool App::moreThanOneInstanceAllowed() { return true; }
+
+void App::initialise(const juce::String &commandLine)
 {
-  public:
-    App() {}
+    juce::ignoreUnused(commandLine);
+    mainWindow.reset(new Window(getApplicationName()));
+}
 
-    const juce::String getApplicationName() override { return JUCE_APPLICATION_NAME_STRING; }
+void App::shutdown() { mainWindow = nullptr; }
 
-    const juce::String getApplicationVersion() override { return JUCE_APPLICATION_VERSION_STRING; }
+void App::systemRequestedQuit() { quit(); }
 
-    bool moreThanOneInstanceAllowed() override { return true; }
+void App::anotherInstanceStarted(const juce::String &commandLine)
+{
+    juce::ignoreUnused(commandLine);
+}
 
-    void initialise(const juce::String &commandLine) override
-    {
-        juce::ignoreUnused(commandLine);
-        mainWindow.reset(new Window(getApplicationName()));
-    }
+App::Window::Window(juce::String name)
+    : DocumentWindow(name,
+                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+                         ResizableWindow::backgroundColourId),
+                     DocumentWindow::allButtons)
+{
+    setUsingNativeTitleBar(true);
+    setContentOwned(new MainComponent(), false);
+    setResizeLimits(640, 480, 800, 600);
+    setResizable(true, false);
+    centreWithSize(getWidth(), getHeight());
+    setVisible(true);
+}
 
-    void shutdown() override { mainWindow = nullptr; }
+App::Window::~Window() { setLookAndFeel(nullptr); }
 
-    void systemRequestedQuit() override { quit(); }
+void App::Window::closeButtonPressed() { JUCEApplication::getInstance()->systemRequestedQuit(); }
 
-    void anotherInstanceStarted(const juce::String &commandLine) override
-    {
-        juce::ignoreUnused(commandLine);
-    }
-
-    class Window : public juce::DocumentWindow
-    {
-      public:
-        explicit Window(juce::String name)
-            : DocumentWindow(name,
-                             juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-                                 ResizableWindow::backgroundColourId),
-                             DocumentWindow::allButtons)
-        {
-            setUsingNativeTitleBar(true);
-            setContentOwned(new MainComponent(), false);
-            setResizeLimits(640, 480, 800, 600);
-            setResizable(true, false);
-            centreWithSize(getWidth(), getHeight());
-            setVisible(true);
-        }
-
-        ~Window() override { setLookAndFeel(nullptr); }
-
-        void closeButtonPressed() override
-        {
-            JUCEApplication::getInstance()->systemRequestedQuit();
-        }
-
-        void lookAndFeelChanged() override
-        {
-            setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-                ResizableWindow::backgroundColourId));
-            repaint();
-        }
-
-      private:
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Window)
-    };
-
-  private:
-    std::unique_ptr<Window> mainWindow;
-};
+void App::Window::lookAndFeelChanged()
+{
+    setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
+        ResizableWindow::backgroundColourId));
+    repaint();
+}
 
 START_JUCE_APPLICATION(App)
