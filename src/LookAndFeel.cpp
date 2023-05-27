@@ -31,15 +31,14 @@ void LookAndFeel::SetColours()
     setColour(juce::TextEditor::textColourId,
               getCurrentColourScheme().getUIColour(ColourScheme::menuText));
     setColour(juce::TextEditor::outlineColourId,
-              getCurrentColourScheme().getUIColour(ColourScheme::outline));
+              getCurrentColourScheme().getUIColour(ColourScheme::menuBackground));
     setColour(juce::TextEditor::focusedOutlineColourId,
-              getCurrentColourScheme().getUIColour(ColourScheme::highlightedText));
+              getCurrentColourScheme().getUIColour(ColourScheme::menuBackground));
 }
 
 CustomTheme::CustomTheme()
 {
     setColourScheme(getGreyColourScheme());
-
     getCurrentColourScheme().setUIColour(ColourScheme::windowBackground, juce::Colours::darkblue);
     getCurrentColourScheme().setUIColour(ColourScheme::widgetBackground, juce::Colours::darkblue);
     getCurrentColourScheme().setUIColour(ColourScheme::menuBackground, juce::Colours::darkblue);
@@ -55,7 +54,6 @@ CustomTheme::CustomTheme()
 DarkTheme::DarkTheme()
 {
     setColourScheme(getDarkColourScheme());
-
     getCurrentColourScheme().setUIColour(ColourScheme::windowBackground, juce::Colours::black);
     getCurrentColourScheme().setUIColour(ColourScheme::widgetBackground, juce::Colours::black);
     getCurrentColourScheme().setUIColour(ColourScheme::menuBackground, juce::Colours::black);
@@ -71,7 +69,6 @@ DarkTheme::DarkTheme()
 LightTheme::LightTheme()
 {
     setColourScheme(getLightColourScheme());
-
     getCurrentColourScheme().setUIColour(ColourScheme::windowBackground, juce::Colours::white);
     getCurrentColourScheme().setUIColour(ColourScheme::widgetBackground, juce::Colours::white);
     getCurrentColourScheme().setUIColour(ColourScheme::menuBackground, juce::Colours::white);

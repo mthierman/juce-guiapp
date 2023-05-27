@@ -5,10 +5,7 @@ Browser::Browser(Options options, juce::TextEditor &addressBox)
 {
 }
 
-void Browser::paint(juce::Graphics &g)
-{
-    // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-}
+void Browser::paint(juce::Graphics &g) { g.fillAll(juce::Colours::transparentBlack); }
 
 bool Browser::pageAboutToLoad(const juce::String &newURL)
 {
@@ -27,13 +24,6 @@ WebView::WebView()
         juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
             .getChildFile("Test")
             .getChildFile("WebView2Loader.dll");
-    // webView.reset(new Browser(
-    //     options.withBackend(Browser::Options::Backend::webview2)
-    //         .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
-    //                                     .withUserDataFolder(dataLocation)
-    //                                     .withBackgroundColour(getLookAndFeel().findColour(
-    //                                         juce::ResizableWindow::backgroundColourId))),
-    //     addressBar));
     webView.reset(
         new Browser(options.withBackend(Browser::Options::Backend::webview2)
                         .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
@@ -42,37 +32,24 @@ WebView::WebView()
                     addressBar));
     addAndMakeVisible(webView.get());
 
-    addAndMakeVisible(url);
-    url.addSectionHeading("URL");
-    url.addItem("about:blank", 1);
-    url.addItem("example.com", 2);
-    url.addItem("dotpiano.com", 3);
-    url.addItem("synth.ameo.dev", 4);
-    url.setSelectedId(Blank);
-    url.onChange = [this] { urlChange(); };
-
     addAndMakeVisible(addressBar);
-    addressBar.setJustification(juce::Justification::verticallyCentred);
+    addressBar.setJustification(juce::Justification::centred);
     addressBar.onReturnKey = [this] { navigate(addressBar.getText()); };
 }
 
 WebView::~WebView() { setLookAndFeel(nullptr); }
 
-void WebView::paint(juce::Graphics &g)
-{
-    // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-}
+void WebView::paint(juce::Graphics &g) { g.fillAll(juce::Colours::transparentBlack); }
 
 void WebView::resized()
 {
-    webView->setBounds(0, 0, getWidth(), getHeight() - 40);
-    url.setBounds(5, getBounds().getHeight() - 35, 200, 30);
-    addressBar.setBounds(210, getBounds().getHeight() - 35, getWidth() - 215, 30);
+    webView->setBounds(0, 0, getWidth(), getHeight() - 30);
+    addressBar.setBounds(0, getBounds().getHeight() - 30, getWidth(), 30);
 }
 
 void WebView::lookAndFeelChanged()
 {
-    url.sendLookAndFeelChange();
+    addressBar.applyColourToAllText(findColour(juce::TextEditor::textColourId));
     repaint();
 }
 

@@ -41,7 +41,7 @@ void App::anotherInstanceStarted(const juce::String &commandLine)
 App::Window::Window(juce::String name)
     : DocumentWindow(name, juce::Colours::transparentBlack, DocumentWindow::allButtons)
 {
-    setUsingNativeTitleBar(false);
+    setUsingNativeTitleBar(true);
     setContentOwned(new MainComponent(), false);
     setResizeLimits(640, 480,
                     juce::Desktop::getInstance().getDisplays().getTotalBounds(true).getWidth(),
