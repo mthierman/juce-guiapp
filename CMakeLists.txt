@@ -36,6 +36,9 @@ target_sources(
   ${PROJECT_NAME}
   PRIVATE
   src/Main.cpp
+  src/MainComponent.cpp
+  src/Theme.cpp
+  src/WebView.cpp
 )
 
 target_compile_definitions(
