@@ -1,25 +1,37 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 
-class DarkLookAndFeel : public juce::LookAndFeel_V4
+class LookAndFeel : public juce::LookAndFeel_V4
 {
   public:
-    DarkLookAndFeel();
+    LookAndFeel();
+    void SetColours();
 
   private:
 };
 
-class LightLookAndFeel : public juce::LookAndFeel_V4
+class CustomTheme : public LookAndFeel
 {
   public:
-    LightLookAndFeel();
+    CustomTheme();
 
   private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomTheme)
 };
 
-class CustomLookAndFeel : public juce::LookAndFeel_V4
+class DarkTheme : public LookAndFeel
 {
   public:
-    CustomLookAndFeel();
+    DarkTheme();
 
   private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DarkTheme)
+};
+
+class LightTheme : public LookAndFeel
+{
+  public:
+    LightTheme();
+
+  private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LightTheme)
 };

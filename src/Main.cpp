@@ -39,10 +39,7 @@ void App::anotherInstanceStarted(const juce::String &commandLine)
 }
 
 App::Window::Window(juce::String name)
-    : DocumentWindow(name,
-                     juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-                         ResizableWindow::backgroundColourId),
-                     DocumentWindow::allButtons)
+    : DocumentWindow(name, juce::Colours::transparentBlack, DocumentWindow::allButtons)
 {
     setUsingNativeTitleBar(false);
     setContentOwned(new MainComponent(), false);
@@ -60,8 +57,7 @@ void App::Window::closeButtonPressed() { JUCEApplication::getInstance()->systemR
 
 void App::Window::lookAndFeelChanged()
 {
-    setBackgroundColour(juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(
-        ResizableWindow::backgroundColourId));
+    setBackgroundColour(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     repaint();
 }
 

@@ -6,6 +6,7 @@ class MainComponent : public juce::Component
   public:
     MainComponent();
     ~MainComponent() override;
+    void paint(juce::Graphics &) override;
     void resized() override;
     void lookAndFeelChanged() override;
 

@@ -7,7 +7,7 @@ Browser::Browser(Options options, juce::TextEditor &addressBox)
 
 void Browser::paint(juce::Graphics &g)
 {
-    // g.fillAll(juce::Colours::yellow);
+    // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 }
 
 bool Browser::pageAboutToLoad(const juce::String &newURL)
@@ -27,17 +27,19 @@ WebView::WebView()
         juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
             .getChildFile("Test")
             .getChildFile("WebView2Loader.dll");
-    webView.reset(new Browser(
-        options
-            .withBackend(Browser::Options::Backend::webview2)
-            // .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
-            //                             .withUserDataFolder(dataLocation)
-            //                             .withBackgroundColour(getLookAndFeel().findColour(
-            //                                 juce::ResizableWindow::backgroundColourId))),
-            .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
-                                        .withUserDataFolder(dataLocation)
-                                        .withBackgroundColour(juce::Colours::black)),
-        addressBar));
+    // webView.reset(new Browser(
+    //     options.withBackend(Browser::Options::Backend::webview2)
+    //         .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
+    //                                     .withUserDataFolder(dataLocation)
+    //                                     .withBackgroundColour(getLookAndFeel().findColour(
+    //                                         juce::ResizableWindow::backgroundColourId))),
+    //     addressBar));
+    webView.reset(
+        new Browser(options.withBackend(Browser::Options::Backend::webview2)
+                        .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
+                                                    .withUserDataFolder(dataLocation)
+                                                    .withBackgroundColour(juce::Colours::black)),
+                    addressBar));
     addAndMakeVisible(webView.get());
 
     addAndMakeVisible(url);
@@ -58,7 +60,7 @@ WebView::~WebView() { setLookAndFeel(nullptr); }
 
 void WebView::paint(juce::Graphics &g)
 {
-    // g.fillAll(juce::Colours::yellow);
+    // g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 }
 
 void WebView::resized()
@@ -68,7 +70,11 @@ void WebView::resized()
     addressBar.setBounds(210, getBounds().getHeight() - 35, getWidth() - 215, 30);
 }
 
-void WebView::lookAndFeelChanged() { repaint(); }
+void WebView::lookAndFeelChanged()
+{
+    url.sendLookAndFeelChange();
+    repaint();
+}
 
 void WebView::urlChange()
 {
@@ -93,17 +99,18 @@ void WebView::urlChange()
 
 void WebView::navigate(juce::String checkUrl)
 {
-    if (checkUrl.contains("http://"))
-    {
-        webView->goToURL(checkUrl);
-    };
-    if (checkUrl.contains("https://"))
-    {
-        webView->goToURL(checkUrl);
-    };
-    if (!checkUrl.contains("http://") || !checkUrl.contains("https://"))
-    {
-        auto https = "https://" + checkUrl;
-        webView->goToURL(https);
-    };
+    webView->goToURL(checkUrl);
+    // if (checkUrl.contains("http://"))
+    // {
+    //     webView->goToURL(checkUrl);
+    // };
+    // if (checkUrl.contains("https://"))
+    // {
+    //     webView->goToURL(checkUrl);
+    // };
+    // if (!checkUrl.contains("http://") || !checkUrl.contains("https://"))
+    // {
+    //     auto https = "https://" + checkUrl;
+    //     webView->goToURL(https);
+    // };
 }

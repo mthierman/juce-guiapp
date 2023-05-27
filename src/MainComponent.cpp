@@ -8,6 +8,11 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent() { setLookAndFeel(nullptr); }
 
+void MainComponent::paint(juce::Graphics &g)
+{
+    g.fillAll(findColour(juce::ComboBox::backgroundColourId));
+}
+
 void MainComponent::resized()
 {
     themeSwitcher.setBounds(5, 5, 100, 30);
