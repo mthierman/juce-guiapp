@@ -1,4 +1,4 @@
-#include <juce_gui_basics/juce_gui_basics.h>
+#include "LookAndFeel.hpp"
 
 class ThemeSwitcher : public juce::Component
 {
@@ -11,15 +11,14 @@ class ThemeSwitcher : public juce::Component
     juce::ComboBox mode;
     enum Mode
     {
-        Dark = 1,
+        System = 1,
+        Dark,
         Light,
-        Grey,
-        Midnight,
-        System
+        Custom
     };
-    juce::LookAndFeel_V4 darkTheme = juce::LookAndFeel_V4::getDarkColourScheme();
-    juce::LookAndFeel_V4 lightTheme = juce::LookAndFeel_V4::getLightColourScheme();
-    juce::LookAndFeel_V4 greyTheme = juce::LookAndFeel_V4::getGreyColourScheme();
-    juce::LookAndFeel_V4 midnightTheme = juce::LookAndFeel_V4::getMidnightColourScheme();
-    juce::LookAndFeel_V4 testTheme = juce::LookAndFeel_V4::getLightColourScheme();
+    DarkLookAndFeel darkTheme;
+    LightLookAndFeel lightTheme;
+    CustomLookAndFeel customTheme;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ThemeSwitcher)
 };

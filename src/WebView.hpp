@@ -9,6 +9,7 @@ class Browser : public juce::WebBrowserComponent
 
   private:
     juce::TextEditor &addressBar;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
 };
 

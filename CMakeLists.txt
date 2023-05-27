@@ -39,6 +39,7 @@ target_sources(
   src/MainComponent.cpp
   src/Theme.cpp
   src/WebView.cpp
+  src/LookAndFeel.cpp
 )
 
 target_compile_definitions(
