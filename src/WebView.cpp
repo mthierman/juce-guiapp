@@ -3,6 +3,9 @@
 Browser::Browser(Options options, juce::TextEditor &addressBox)
     : juce::WebBrowserComponent(options), addressBar(addressBox)
 {
+    juce::Font inter = juce::Font("Segoe UI Variable", 20.0f, juce::Font::plain);
+    addressBar.setFont(inter);
+    addressBar.setJustification(juce::Justification::centred);
 }
 
 void Browser::paint(juce::Graphics &g) { g.fillAll(juce::Colours::transparentBlack); }
@@ -33,7 +36,6 @@ WebView::WebView()
     addAndMakeVisible(webView.get());
 
     addAndMakeVisible(addressBar);
-    addressBar.setJustification(juce::Justification::centred);
     addressBar.onReturnKey = [this] { navigate(addressBar.getText()); };
 }
 
