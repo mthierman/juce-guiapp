@@ -13,7 +13,7 @@ class CustomTheme : public LookAndFeel
 {
   public:
     CustomTheme();
-    juce::Font getComboBoxFont(juce::ComboBox&) override;
+    juce::Font getComboBoxFont(juce::ComboBox &) override;
 
   private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CustomTheme)

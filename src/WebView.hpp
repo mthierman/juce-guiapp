@@ -1,12 +1,18 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 
-class Browser : public juce::WebBrowserComponent
+class Browser : public juce::WebBrowserComponent,
+                public juce::DragAndDropTarget
 {
   public:
     Browser(Options options, juce::TextEditor &addressBox);
     void paint(juce::Graphics &) override;
     bool pageAboutToLoad(const juce::String &newURL) override;
     void newWindowAttemptingToLoad(const juce::String &newURL) override;
+    bool isInterestedInDragSource(const SourceDetails &dragSourceDetails) override;
+    void itemDragEnter(const SourceDetails &dragSourceDetails) override;
+    void itemDragMove(const SourceDetails &dragSourceDetails) override;
+    void itemDragExit(const SourceDetails &dragSourceDetails) override;
+    void itemDropped(const SourceDetails &dragSourceDetails) override;
 
   private:
     juce::TextEditor &addressBar;

@@ -18,6 +18,10 @@ bool Browser::pageAboutToLoad(const juce::String &newURL)
 
 void Browser::newWindowAttemptingToLoad(const juce::String &newURL) { goToURL(newURL); }
 
+// bool Browser::isInterestedInDragSource(const SourceDetails &dragSourceDetails) {}
+
+// void Browser::itemDropped(const SourceDetails &dragSourceDetails) {}
+
 WebView::WebView()
 {
     dataLocation =
@@ -76,20 +80,4 @@ void WebView::urlChange()
     }
 }
 
-void WebView::navigate(juce::String checkUrl)
-{
-    webView->goToURL(checkUrl);
-    // if (checkUrl.contains("http://"))
-    // {
-    //     webView->goToURL(checkUrl);
-    // };
-    // if (checkUrl.contains("https://"))
-    // {
-    //     webView->goToURL(checkUrl);
-    // };
-    // if (!checkUrl.contains("http://") || !checkUrl.contains("https://"))
-    // {
-    //     auto https = "https://" + checkUrl;
-    //     webView->goToURL(https);
-    // };
-}
+void WebView::navigate(juce::String checkUrl) { webView->goToURL(checkUrl); }
