@@ -3,13 +3,14 @@
 class WebView : public juce::WebBrowserComponent
 {
   public:
-    WebView(Options options, juce::TextEditor& addressBox);
+    // WebView(Options options, juce::TextEditor& addressBox);
+    WebView(Options options);
     void paint(juce::Graphics&) override;
     bool pageAboutToLoad(const juce::String& newURL) override;
     void newWindowAttemptingToLoad(const juce::String& newURL) override;
 
   private:
-    juce::TextEditor& addressBar;
+    // juce::TextEditor& addressBar;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };
@@ -22,8 +23,7 @@ class WebViewComponent : public juce::Component
     void paint(juce::Graphics&) override;
     void resized() override;
     void lookAndFeelChanged() override;
-    void urlChange();
-    void navigate(juce::String checkUrl);
+    // void navigate(juce::String checkUrl);
 
   private:
     std::unique_ptr<WebView> webView;
@@ -31,15 +31,7 @@ class WebViewComponent : public juce::Component
     juce::File dllLocation;
     WebView::Options options;
     WebView::Options::WinWebView2 optionsWebView2;
-    juce::ComboBox url;
-    enum Page
-    {
-        Blank = 1,
-        Example,
-        Dotpiano,
-        Ameo,
-    };
-    juce::TextEditor addressBar;
+    // juce::TextEditor addressBar;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebViewComponent)
 };
