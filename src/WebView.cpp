@@ -8,12 +8,14 @@ Browser::Browser(Options options, juce::TextEditor& addressBox)
     addressBar.setJustification(juce::Justification::centred);
 }
 
-void Browser::paint(juce::Graphics& g) { 
+void Browser::paint(juce::Graphics& g)
+{
     g.fillAll(juce::Colours::transparentBlack);
-    if (somethingIsBeingDragged) {
-        g.setColour(juce::Colours::red);
-        g.drawRect(getLocalBounds());
-    }
+    // if (somethingIsBeingDragged)
+    // {
+    //     g.setColour(juce::Colours::red);
+    //     g.drawRect(getLocalBounds());
+    // }
 }
 
 bool Browser::pageAboutToLoad(const juce::String& newURL)
@@ -24,12 +26,27 @@ bool Browser::pageAboutToLoad(const juce::String& newURL)
 
 void Browser::newWindowAttemptingToLoad(const juce::String& newURL) { goToURL(newURL); }
 
-bool Browser::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
+// bool Browser::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
 
-void Browser::itemDragEnter(const SourceDetails& dragSourceDetails) { repaint(); }
-void Browser::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
-void Browser::itemDragExit(const SourceDetails& dragSourceDetails) { repaint(); }
-void Browser::itemDropped(const SourceDetails& dragSourceDetails) { repaint(); }
+// void Browser::itemDragEnter(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = true;
+//     repaint();
+// }
+
+// void Browser::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
+
+// void Browser::itemDragExit(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = false;
+//     repaint();
+// }
+
+// void Browser::itemDropped(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = false;
+//     repaint();
+// }
 
 WebView::WebView()
 {

@@ -14,6 +14,7 @@ class Tab : public juce::Component,
     void itemDragMove(const SourceDetails& dragSourceDetails) override;
     void itemDragExit(const SourceDetails& dragSourceDetails) override;
     void itemDropped(const SourceDetails& dragSourceDetails) override;
+    void mouseDrag(const juce::MouseEvent& mouseEvent) override;
 
   private:
     bool somethingIsBeingDragged = false;
