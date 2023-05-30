@@ -1,7 +1,5 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 
-// class Browser : public juce::WebBrowserComponent,
-//                 public juce::DragAndDropTarget
 class Browser : public juce::WebBrowserComponent
 {
   public:
@@ -9,19 +7,15 @@ class Browser : public juce::WebBrowserComponent
     void paint(juce::Graphics&) override;
     bool pageAboutToLoad(const juce::String& newURL) override;
     void newWindowAttemptingToLoad(const juce::String& newURL) override;
-    // bool isInterestedInDragSource(const SourceDetails& dragSourceDetails) override;
-    // void itemDragEnter(const SourceDetails& dragSourceDetails) override;
-    // void itemDragMove(const SourceDetails& dragSourceDetails) override;
-    // void itemDragExit(const SourceDetails& dragSourceDetails) override;
-    // void itemDropped(const SourceDetails& dragSourceDetails) override;
 
   private:
     juce::TextEditor& addressBar;
-    bool somethingIsBeingDragged = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
 };
 
+// class WebView : public juce::Component,
+//                 public juce::DragAndDropTarget
 class WebView : public juce::Component
 {
   public:
@@ -32,6 +26,12 @@ class WebView : public juce::Component
     void lookAndFeelChanged() override;
     void urlChange();
     void navigate(juce::String checkUrl);
+    // bool isInterestedInDragSource(const SourceDetails& dragSourceDetails) override;
+    // void itemDragEnter(const SourceDetails& dragSourceDetails) override;
+    // void itemDragMove(const SourceDetails& dragSourceDetails) override;
+    // void itemDragExit(const SourceDetails& dragSourceDetails) override;
+    // void itemDropped(const SourceDetails& dragSourceDetails) override;
+    // void mouseDrag(const juce::MouseEvent& mouseEvent) override;
 
   private:
     std::unique_ptr<Browser> webView;
@@ -48,6 +48,7 @@ class WebView : public juce::Component
         Ameo,
     };
     juce::TextEditor addressBar;
+    // bool somethingIsBeingDragged = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };

@@ -26,7 +26,7 @@ void Tab::resized() {}
 
 void Tab::lookAndFeelChanged() { repaint(); }
 
-bool Tab::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return false; }
+bool Tab::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
 
 void Tab::itemDragEnter(const SourceDetails& dragSourceDetails)
 {

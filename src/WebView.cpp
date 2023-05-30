@@ -26,28 +26,6 @@ bool Browser::pageAboutToLoad(const juce::String& newURL)
 
 void Browser::newWindowAttemptingToLoad(const juce::String& newURL) { goToURL(newURL); }
 
-// bool Browser::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
-
-// void Browser::itemDragEnter(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = true;
-//     repaint();
-// }
-
-// void Browser::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
-
-// void Browser::itemDragExit(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = false;
-//     repaint();
-// }
-
-// void Browser::itemDropped(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = false;
-//     repaint();
-// }
-
 WebView::WebView()
 {
     dataLocation =
@@ -64,9 +42,9 @@ WebView::WebView()
                                                     .withBackgroundColour(juce::Colours::black)),
                     addressBar));
     addAndMakeVisible(webView.get());
-
     addAndMakeVisible(addressBar);
     addressBar.onReturnKey = [this] { navigate(addressBar.getText()); };
+    webView->goToURL("https://docs.juce.com/develop/index.html");
 }
 
 WebView::~WebView() { setLookAndFeel(nullptr); }
@@ -107,3 +85,37 @@ void WebView::urlChange()
 }
 
 void WebView::navigate(juce::String checkUrl) { webView->goToURL(checkUrl); }
+
+// bool WebView::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
+
+// void WebView::itemDragEnter(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = true;
+//     repaint();
+// }
+
+// void WebView::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
+
+// void WebView::itemDragExit(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = false;
+//     repaint();
+// }
+
+// void WebView::itemDropped(const SourceDetails& dragSourceDetails)
+// {
+//     somethingIsBeingDragged = false;
+//     repaint();
+// }
+
+// void WebView::mouseDrag(const juce::MouseEvent& mouseEvent)
+// {
+//     if (!somethingIsBeingDragged && mouseEvent.getDistanceFromDragStart() > 1.5f)
+//     {
+//         if (auto* container = juce::DragAndDropContainer::findParentDragContainerFor(this))
+//         {
+//             container->startDragging("Browser", this);
+//             somethingIsBeingDragged = true;
+//         }
+//     }
+// }
