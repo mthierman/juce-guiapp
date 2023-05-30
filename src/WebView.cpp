@@ -8,7 +8,13 @@ Browser::Browser(Options options, juce::TextEditor& addressBox)
     addressBar.setJustification(juce::Justification::centred);
 }
 
-void Browser::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
+void Browser::paint(juce::Graphics& g) { 
+    g.fillAll(juce::Colours::transparentBlack);
+    if (somethingIsBeingDragged) {
+        g.setColour(juce::Colours::red);
+        g.drawRect(getLocalBounds());
+    }
+}
 
 bool Browser::pageAboutToLoad(const juce::String& newURL)
 {

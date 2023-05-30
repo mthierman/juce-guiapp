@@ -40,6 +40,7 @@ target_sources(
   src/Theme.cpp
   src/WebView.cpp
   src/LookAndFeel.cpp
+  src/Tab.cpp
 )
 
 target_compile_definitions(
