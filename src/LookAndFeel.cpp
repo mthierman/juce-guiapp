@@ -51,10 +51,10 @@ CustomTheme::CustomTheme()
     SetColours();
 }
 
-// juce::Font CustomTheme::getComboBoxFont(juce::ComboBox& comboBox)
-// {
-//     return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
-// }
+juce::Font CustomTheme::getComboBoxFont(juce::ComboBox& comboBox)
+{
+    return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
+}
 
 DarkTheme::DarkTheme()
 {
@@ -71,6 +71,11 @@ DarkTheme::DarkTheme()
     SetColours();
 }
 
+juce::Font DarkTheme::getComboBoxFont(juce::ComboBox& comboBox)
+{
+    return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
+}
+
 LightTheme::LightTheme()
 {
     setColourScheme(getLightColourScheme());
@@ -84,4 +89,9 @@ LightTheme::LightTheme()
     getCurrentColourScheme().setUIColour(ColourScheme::highlightedFill, juce::Colours::lightblue);
     getCurrentColourScheme().setUIColour(ColourScheme::menuText, juce::Colours::black);
     SetColours();
+}
+
+juce::Font LightTheme::getComboBoxFont(juce::ComboBox& comboBox)
+{
+    return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
 }
