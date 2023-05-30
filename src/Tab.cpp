@@ -6,8 +6,8 @@ Tab::~Tab() { setLookAndFeel(nullptr); }
 
 void Tab::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::lightblue);
-    g.setColour(juce::Colours::black);
+    g.fillAll(findColour(juce::ResizableWindow::backgroundColourId));
+    g.setColour(findColour(juce::DocumentWindow::textColourId));
     g.drawText(tabTitle, getLocalBounds(), juce::Justification::centred);
 }
 

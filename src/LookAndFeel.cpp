@@ -51,10 +51,10 @@ CustomTheme::CustomTheme()
     SetColours();
 }
 
-juce::Font CustomTheme::getComboBoxFont(juce::ComboBox &comboBox)
-{
-    return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
-}
+// juce::Font CustomTheme::getComboBoxFont(juce::ComboBox& comboBox)
+// {
+//     return juce::Font("Segoe UI Variable", 20.0f, juce::Font::italic);
+// }
 
 DarkTheme::DarkTheme()
 {
