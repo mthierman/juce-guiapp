@@ -1,6 +1,6 @@
 #include "WebView.hpp"
 
-Browser::Browser(Options options, juce::TextEditor &addressBox)
+Browser::Browser(Options options, juce::TextEditor& addressBox)
     : juce::WebBrowserComponent(options), addressBar(addressBox)
 {
     juce::Font inter = juce::Font("Segoe UI Variable", 20.0f, juce::Font::plain);
@@ -8,19 +8,22 @@ Browser::Browser(Options options, juce::TextEditor &addressBox)
     addressBar.setJustification(juce::Justification::centred);
 }
 
-void Browser::paint(juce::Graphics &g) { g.fillAll(juce::Colours::transparentBlack); }
+void Browser::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
 
-bool Browser::pageAboutToLoad(const juce::String &newURL)
+bool Browser::pageAboutToLoad(const juce::String& newURL)
 {
     addressBar.setText(newURL, false);
     return true;
 }
 
-void Browser::newWindowAttemptingToLoad(const juce::String &newURL) { goToURL(newURL); }
+void Browser::newWindowAttemptingToLoad(const juce::String& newURL) { goToURL(newURL); }
 
-// bool Browser::isInterestedInDragSource(const SourceDetails &dragSourceDetails) {}
+bool Browser::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
 
-// void Browser::itemDropped(const SourceDetails &dragSourceDetails) {}
+void Browser::itemDragEnter(const SourceDetails& dragSourceDetails) { repaint(); }
+void Browser::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
+void Browser::itemDragExit(const SourceDetails& dragSourceDetails) { repaint(); }
+void Browser::itemDropped(const SourceDetails& dragSourceDetails) { repaint(); }
 
 WebView::WebView()
 {
@@ -45,7 +48,7 @@ WebView::WebView()
 
 WebView::~WebView() { setLookAndFeel(nullptr); }
 
-void WebView::paint(juce::Graphics &g) { g.fillAll(juce::Colours::transparentBlack); }
+void WebView::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
 
 void WebView::resized()
 {

@@ -5,3 +5,4 @@ SortIncludes: Never
 AlignAfterOpenBracket: Align
 BreakBeforeBraces: Allman
 BreakInheritanceList: AfterComma
+PointerAlignment: Left

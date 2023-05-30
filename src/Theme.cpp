@@ -12,7 +12,7 @@ ThemeSwitcher::ThemeSwitcher()
     mode.setSelectedId(System);
 }
 
-void ThemeSwitcher::paint(juce::Graphics &g)
+void ThemeSwitcher::paint(juce::Graphics& g)
 {
     g.fillAll(findColour(juce::ComboBox::backgroundColourId));
 }
@@ -30,7 +30,7 @@ void ThemeSwitcher::modeChange()
     case System:
         if (dark)
         {
-            juce::Desktop::getInstance().setDefaultLookAndFeel(&lightTheme);
+            juce::Desktop::getInstance().setDefaultLookAndFeel(&darkTheme);
         }
         if (!dark)
         {
