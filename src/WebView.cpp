@@ -8,15 +8,7 @@ Browser::Browser(Options options, juce::TextEditor& addressBox)
     addressBar.setJustification(juce::Justification::centred);
 }
 
-void Browser::paint(juce::Graphics& g)
-{
-    g.fillAll(juce::Colours::transparentBlack);
-    // if (somethingIsBeingDragged)
-    // {
-    //     g.setColour(juce::Colours::red);
-    //     g.drawRect(getLocalBounds());
-    // }
-}
+void Browser::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
 
 bool Browser::pageAboutToLoad(const juce::String& newURL)
 {
@@ -53,8 +45,8 @@ void WebView::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBla
 
 void WebView::resized()
 {
-    webView->setBounds(0, 0, getWidth(), getHeight() - 30);
-    addressBar.setBounds(0, getBounds().getHeight() - 30, getWidth(), 30);
+    webView->setBounds(0, 0, getWidth(), getHeight() - 100);
+    addressBar.setBounds(0, getHeight() - 100, getWidth(), 100);
 }
 
 void WebView::lookAndFeelChanged()
@@ -85,37 +77,3 @@ void WebView::urlChange()
 }
 
 void WebView::navigate(juce::String checkUrl) { webView->goToURL(checkUrl); }
-
-// bool WebView::isInterestedInDragSource(const SourceDetails& dragSourceDetails) { return true; }
-
-// void WebView::itemDragEnter(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = true;
-//     repaint();
-// }
-
-// void WebView::itemDragMove(const SourceDetails& dragSourceDetails) { repaint(); }
-
-// void WebView::itemDragExit(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = false;
-//     repaint();
-// }
-
-// void WebView::itemDropped(const SourceDetails& dragSourceDetails)
-// {
-//     somethingIsBeingDragged = false;
-//     repaint();
-// }
-
-// void WebView::mouseDrag(const juce::MouseEvent& mouseEvent)
-// {
-//     if (!somethingIsBeingDragged && mouseEvent.getDistanceFromDragStart() > 1.5f)
-//     {
-//         if (auto* container = juce::DragAndDropContainer::findParentDragContainerFor(this))
-//         {
-//             container->startDragging("Browser", this);
-//             somethingIsBeingDragged = true;
-//         }
-//     }
-// }

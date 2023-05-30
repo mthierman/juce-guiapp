@@ -1,25 +1,14 @@
 #include "Tab.hpp"
 
-Tab::Tab() {}
+Tab::Tab(juce::String title) { tabTitle = title; }
 
 Tab::~Tab() { setLookAndFeel(nullptr); }
 
 void Tab::paint(juce::Graphics& g)
 {
-    if (somethingIsBeingDragged)
-    {
-        g.fillAll(juce::Colours::lightpink);
-        g.setColour(juce::Colours::black);
-        g.drawRect(getLocalBounds());
-        g.drawText("Dragging!", getLocalBounds(), juce::Justification::centred);
-    }
-    if (!somethingIsBeingDragged)
-    {
-        g.fillAll(juce::Colours::lightcoral);
-        g.setColour(juce::Colours::black);
-        g.drawRect(getLocalBounds());
-        g.drawText("Not Dragging.", getLocalBounds(), juce::Justification::centred);
-    }
+    g.fillAll(juce::Colours::lightblue);
+    g.setColour(juce::Colours::black);
+    g.drawText(tabTitle, getLocalBounds(), juce::Justification::centred);
 }
 
 void Tab::resized() {}
@@ -50,7 +39,7 @@ void Tab::itemDropped(const SourceDetails& dragSourceDetails)
 
 void Tab::mouseDrag(const juce::MouseEvent& mouseEvent)
 {
-    if (!somethingIsBeingDragged && mouseEvent.getDistanceFromDragStart() > 1.5f)
+    if (!somethingIsBeingDragged)
     {
         if (auto* container = juce::DragAndDropContainer::findParentDragContainerFor(this))
         {
@@ -58,4 +47,11 @@ void Tab::mouseDrag(const juce::MouseEvent& mouseEvent)
             somethingIsBeingDragged = true;
         }
     }
+    repaint();
+}
+
+void Tab::mouseUp(const juce::MouseEvent& mouseEvent)
+{
+    somethingIsBeingDragged = false;
+    repaint();
 }

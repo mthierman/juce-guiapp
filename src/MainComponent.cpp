@@ -18,11 +18,11 @@ void MainComponent::paint(juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    themeSwitcher.setBounds(2, 2, 100, 20);
+    themeSwitcher.setBounds(5, 5, 100, 25);
     tab1.setBounds(104, 2, 100, 20);
     tab2.setBounds(208, 2, 100, 20);
-    webView1.setBounds(0, 24, (getWidth() / 2) - 1, getHeight() - 24);
-    webView2.setBounds((getWidth() / 2) + 1, 24, (getWidth() / 2) - 1, getHeight() - 24);
+    webView1.setBounds(0, 35, (getWidth() / 2) - 1, getHeight());
+    webView2.setBounds((getWidth() / 2) + 1, 35, (getWidth() / 2) - 1, getBounds().getHeight());
 }
 
 void MainComponent::lookAndFeelChanged() { repaint(); }
