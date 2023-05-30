@@ -1,9 +1,9 @@
 #include <juce_gui_extra/juce_gui_extra.h>
 
-class Browser : public juce::WebBrowserComponent
+class WebView : public juce::WebBrowserComponent
 {
   public:
-    Browser(Options options, juce::TextEditor& addressBox);
+    WebView(Options options, juce::TextEditor& addressBox);
     void paint(juce::Graphics&) override;
     bool pageAboutToLoad(const juce::String& newURL) override;
     void newWindowAttemptingToLoad(const juce::String& newURL) override;
@@ -11,14 +11,14 @@ class Browser : public juce::WebBrowserComponent
   private:
     juce::TextEditor& addressBar;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Browser)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
 };
 
-class WebView : public juce::Component
+class WebViewComponent : public juce::Component
 {
   public:
-    WebView();
-    ~WebView() override;
+    WebViewComponent();
+    ~WebViewComponent() override;
     void paint(juce::Graphics&) override;
     void resized() override;
     void lookAndFeelChanged() override;
@@ -26,11 +26,11 @@ class WebView : public juce::Component
     void navigate(juce::String checkUrl);
 
   private:
-    std::unique_ptr<Browser> webView;
+    std::unique_ptr<WebView> webView;
     juce::File dataLocation;
     juce::File dllLocation;
-    Browser::Options options;
-    Browser::Options::WinWebView2 optionsWebView2;
+    WebView::Options options;
+    WebView::Options::WinWebView2 optionsWebView2;
     juce::ComboBox url;
     enum Page
     {
@@ -41,5 +41,5 @@ class WebView : public juce::Component
     };
     juce::TextEditor addressBar;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebView)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WebViewComponent)
 };

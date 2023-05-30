@@ -1,6 +1,6 @@
 #include "WebView.hpp"
 
-Browser::Browser(Options options, juce::TextEditor& addressBox)
+WebView::WebView(Options options, juce::TextEditor& addressBox)
     : juce::WebBrowserComponent(options), addressBar(addressBox)
 {
     juce::Font inter = juce::Font("Segoe UI Variable", 20.0f, juce::Font::plain);
@@ -8,17 +8,17 @@ Browser::Browser(Options options, juce::TextEditor& addressBox)
     addressBar.setJustification(juce::Justification::centred);
 }
 
-void Browser::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
+void WebView::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
 
-bool Browser::pageAboutToLoad(const juce::String& newURL)
+bool WebView::pageAboutToLoad(const juce::String& newURL)
 {
     addressBar.setText(newURL, false);
     return true;
 }
 
-void Browser::newWindowAttemptingToLoad(const juce::String& newURL) { goToURL(newURL); }
+void WebView::newWindowAttemptingToLoad(const juce::String& newURL) { goToURL(newURL); }
 
-WebView::WebView()
+WebViewComponent::WebViewComponent()
 {
     dataLocation =
         juce::File::getSpecialLocation(juce::File::SpecialLocationType::windowsLocalAppData)
@@ -28,7 +28,7 @@ WebView::WebView()
             .getChildFile("Test")
             .getChildFile("WebView2Loader.dll");
     webView.reset(
-        new Browser(options.withBackend(Browser::Options::Backend::webview2)
+        new WebView(options.withBackend(WebView::Options::Backend::webview2)
                         .withWinWebView2Options(optionsWebView2.withDLLLocation(dllLocation)
                                                     .withUserDataFolder(dataLocation)
                                                     .withBackgroundColour(juce::Colours::black)),
@@ -39,23 +39,23 @@ WebView::WebView()
     webView->goToURL("https://docs.juce.com/develop/index.html");
 }
 
-WebView::~WebView() { setLookAndFeel(nullptr); }
+WebViewComponent::~WebViewComponent() { setLookAndFeel(nullptr); }
 
-void WebView::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
+void WebViewComponent::paint(juce::Graphics& g) { g.fillAll(juce::Colours::transparentBlack); }
 
-void WebView::resized()
+void WebViewComponent::resized()
 {
     webView->setBounds(0, 0, getWidth(), getHeight() - 100);
     addressBar.setBounds(0, getHeight() - 100, getWidth(), 100);
 }
 
-void WebView::lookAndFeelChanged()
+void WebViewComponent::lookAndFeelChanged()
 {
     addressBar.applyColourToAllText(findColour(juce::TextEditor::textColourId));
     repaint();
 }
 
-void WebView::urlChange()
+void WebViewComponent::urlChange()
 {
     switch (url.getSelectedId())
     {
@@ -76,4 +76,4 @@ void WebView::urlChange()
     }
 }
 
-void WebView::navigate(juce::String checkUrl) { webView->goToURL(checkUrl); }
+void WebViewComponent::navigate(juce::String checkUrl) { webView->goToURL(checkUrl); }

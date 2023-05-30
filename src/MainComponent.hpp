@@ -18,7 +18,7 @@ class MainComponent : public juce::Component,
     juce::String tab2Title = "Test2";
     Tab tab1 = Tab(tab1Title);
     Tab tab2 = Tab(tab2Title);
-    WebView webView1;
-    WebView webView2;
+    WebViewComponent webView1;
+    WebViewComponent webView2;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };
