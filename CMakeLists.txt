@@ -21,10 +21,6 @@ execute_process(
   nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory ${CMAKE_SOURCE_DIR}/external
 )
 
-# add_subdirectory(
-# libs/JUCE
-# EXCLUDE_FROM_ALL
-# )
 add_subdirectory(
   $ENV{JUCE}
   build
@@ -61,7 +57,6 @@ target_compile_definitions(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
-  libs/choc/platform
   external/${WEBVIEW_LIB}/build/native/include
 )
 

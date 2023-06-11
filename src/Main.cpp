@@ -1,10 +1,6 @@
 #include "Main.hpp"
 #include "MainComponent.hpp"
-#include <choc_Platform.h>
-
-#if CHOC_WINDOWS
 #include "Windows.h"
-#endif
 
 App::App()
 {
