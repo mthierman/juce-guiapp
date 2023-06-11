@@ -7,19 +7,11 @@ project(
   LANGUAGES C CXX ASM
 )
 
-set(WEBVIEW "Microsoft.Web.WebView2")
-set(WEBVIEW_VER "1.0.1774.30")
-set(WEBVIEW_LIB "${WEBVIEW}.${WEBVIEW_VER}")
-set(WEBVIEW_DLL WebView2Loader.dll)
+set(WEBVIEW_VER "1.0.1823.32")
 
 math(EXPR BITNESS "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL)
 message(STATUS "${PROJECT_NAME} v${PROJECT_VERSION} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}]")
 file(WRITE ${CMAKE_BINARY_DIR}/version.txt "v${PROJECT_VERSION}")
-
-execute_process(
-  COMMAND
-  nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory ${CMAKE_SOURCE_DIR}/external
-)
 
 add_subdirectory(
   $ENV{JUCE}
@@ -57,7 +49,7 @@ target_compile_definitions(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
-  external/${WEBVIEW_LIB}/build/native/include
+  $ENV{WEBVIEW2}/${WEBVIEW_VER}/build/native/include
 )
 
 if(DEFINED ENV{ASIOSDK_DIR})
