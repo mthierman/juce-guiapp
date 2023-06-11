@@ -23,7 +23,7 @@ execute_process(
 
 add_subdirectory(
   $ENV{JUCE}
-  build
+  JUCE
   EXCLUDE_FROM_ALL
 )
 
