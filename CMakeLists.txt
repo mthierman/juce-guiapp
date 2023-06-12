@@ -7,17 +7,39 @@ project(
   LANGUAGES C CXX ASM
 )
 
-set(WEBVIEW_VER "1.0.1823.32")
-
 math(EXPR BITNESS "${CMAKE_SIZEOF_VOID_P} * 8" OUTPUT_FORMAT DECIMAL)
 message(STATUS "${PROJECT_NAME} v${PROJECT_VERSION} (${BITNESS}-bit) [${CMAKE_BUILD_TYPE}]")
 file(WRITE ${CMAKE_BINARY_DIR}/version.txt "v${PROJECT_VERSION}")
 
-add_subdirectory(
-  $ENV{JUCE}
-  JUCE
-  EXCLUDE_FROM_ALL
-)
+set(WEBVIEW "Microsoft.Web.WebView2")
+set(WEBVIEW_VER "1.0.1823.32")
+
+if(DEFINED ENV{WEBVIEW_PKG})
+  set(WEBVIEW_PKG $ENV{WEBVIEW_PKG})
+else()
+  execute_process(
+    COMMAND
+    nuget install ${WEBVIEW} -Version ${WEBVIEW_VER} -OutputDirectory ${CMAKE_BINARY_DIR}/libs
+  )
+  set(WEBVIEW_PKG ${CMAKE_BINARY_DIR}/libs/${WEBVIEW}.${WEBVIEW_VER})
+endif()
+
+include(FetchContent)
+
+if(DEFINED ENV{JUCE})
+  set(JUCE_PKG $ENV{JUCE})
+  add_subdirectory(
+    ${JUCE_PKG}
+    JUCE
+    EXCLUDE_FROM_ALL
+  )
+else()
+  FetchContent_Declare(
+    JUCE
+    URL https://github.com/juce-framework/JUCE/archive/refs/heads/develop.zip
+  )
+  FetchContent_MakeAvailable(JUCE)
+endif()
 
 juce_add_gui_app(
   ${PROJECT_NAME}
@@ -49,11 +71,11 @@ target_compile_definitions(
 target_include_directories(
   ${PROJECT_NAME}
   PRIVATE
-  $ENV{WEBVIEW2}/${WEBVIEW_VER}/build/native/include
+  ${WEBVIEW_PKG}/build/native/include
 )
 
 if(DEFINED ENV{ASIOSDK_DIR})
-  file(TO_CMAKE_PATH "$ENV{ASIOSDK_DIR}" ASIOSDK_DIR)
+  set(ASIOSDK_DIR $ENV{ASIOSDK_DIR})
   target_compile_definitions(
     ${PROJECT_NAME}
     PRIVATE
